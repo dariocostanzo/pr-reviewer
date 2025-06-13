@@ -14,7 +14,12 @@ class PRAnalyzer:
         load_dotenv()
 
         # Initialize MCP Server
-        self.mcp = FastMCP("github_pr_analysis")
+        self.mcp = FastMCP(
+            transport="streamable-http",
+            name="PR Reviewer",
+            host="0.0.0.0",
+            port=8082,
+        )
         print("MCP Server initialized", file=sys.stderr)
 
         # Initialize Notion client
@@ -96,7 +101,7 @@ class PRAnalyzer:
         """Start the MCP server."""
         try:
             print("Running MCP Server for GitHub PR Analysis...", file=sys.stderr)
-            self.mcp.run(transport="stdio")
+            self.mcp.run(transport="streamable-http")
         except Exception as e:
             print(f"Fatal Error in MCP Server: {str(e)}", file=sys.stderr)
             traceback.print_exc(file=sys.stderr)
